@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@layer base {
+    body {
+        @apply flex items-center justify-center w-screen h-dvh bg-indigo-400 md:h-screen;
+    }
+
+    h1 {
+        @apply text-3xl font-bold;
+    }
+
+    h2 {
+        @apply text-2xl font-bold;
+    }
+
+    h3 {
+        @apply text-xl font-bold;
+    }
+
+    h4 {
+        @apply text-base font-bold;
+    }
+
+    h5 {
+        @apply text-sm font-bold;
+    }
+
+    h6 {
+        @apply text-xs font-bold;
+    }
+
+    p,
+    strong {
+        @apply text-base;
+    }
+}
+
+@layer components {
+    .col {
+        @apply flex flex-col;
+    }
+
+    .flex-center {
+        @apply flex items-center justify-center;
+    }
+
+    .row {
+        @apply flex;
+    }
+}
