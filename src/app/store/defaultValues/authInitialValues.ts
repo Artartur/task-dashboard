@@ -4,3 +4,8 @@ export const authInitialValues: IAuthState = {
   isAuthenticated: false,
   loading: true,
 }
+
+export const loginInitialValues = {
+  username: '',
+  password: ''
+}

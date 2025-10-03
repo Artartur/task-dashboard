@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useAuth } from "@/hooks/useAuth";
 import { loginSchema } from "@/validators/loginSchema";
-import { loginInitialValues } from "@/store/defaultValues/loginInitialValues";
+import { loginInitialValues } from "@/store/defaultValues/authInitialValues";
 
 export default function Login() {
   const { state, actions } = useAuth();
