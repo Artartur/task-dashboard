@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useAuth } from "@/hooks/useAuth";
 import { loginSchema } from "@/validators/loginSchema";
+import { loginInitialValues } from "@/store/defaultValues/loginInitialValues";
 
 export default function Login() {
   const { state, actions } = useAuth();
@@ -20,10 +21,7 @@ export default function Login() {
     reset
   } = useForm({
     resolver: zodResolver(loginSchema),
-    defaultValues: {
-      username: '',
-      password: '',
-    }
+    defaultValues: loginInitialValues
   });
 
   const onSubmit = (data: { username: string, password: string }) => {
