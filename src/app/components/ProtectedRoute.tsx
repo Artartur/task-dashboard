@@ -19,8 +19,8 @@ export default function ProtectedRoute({ children }: { children: ReactNode }) {
   if (!state.isAuthenticated) return null;
 
   return (
-    <>
+    <div className="w-screen h-screen">
       {children}
-    </>
+    </div>
   )
 }
