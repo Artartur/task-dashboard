@@ -1,4 +1,5 @@
 import { IGlobalReducerActions, IGlobalState } from "@/interfaces/global.types";
+import { setDragOverColumn } from "../actions/GlobalActions";
 
 export function GlobalReducer(state: IGlobalState, action: IGlobalReducerActions) {
   switch (action.type) {
@@ -43,6 +44,9 @@ export function GlobalReducer(state: IGlobalState, action: IGlobalReducerActions
 
     case 'SET_DRAGGED_TASK':
       return { ...state, draggedTask: action.payload };
+
+    case 'SET_DRAG_OVER_COLUMN':
+      return { ...state, dragOverColumn: action.payload };
 
     case 'SET_SELECTED_TASK':
       return { ...state, selectedTask: action.payload };

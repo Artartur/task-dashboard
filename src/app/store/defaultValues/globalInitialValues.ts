@@ -10,6 +10,7 @@ export const taskInitialValues: ITask = {
 }
 
 export const globalInitialValues: IGlobalState = {
+  dragOverColumn: null,
   draggedTask: null,
   selectedTask: null,
   showCreateTaskModal: false,

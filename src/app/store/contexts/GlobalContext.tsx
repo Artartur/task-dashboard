@@ -10,6 +10,7 @@ import {
   deleteTask,
   editTask,
   setDraggedTask,
+  setDragOverColumn,
   setSelectedTask,
   setShowCreateTaskModal,
   setShowEditTaskModal,
@@ -41,6 +42,9 @@ export function GlobalProvider({ children }: { children: ReactNode }) {
 
     setDraggedTask: (task: ITask | null) =>
       dispatch(setDraggedTask(task)),
+
+    setDragOverColumn: (dragOverColumn: string | null) =>
+      dispatch(setDragOverColumn(dragOverColumn)),
 
     setSelectedTask: (task: ITask | null) =>
       dispatch(setSelectedTask(task)),
