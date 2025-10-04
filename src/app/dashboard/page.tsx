@@ -6,17 +6,21 @@ import { useGlobal } from "@/hooks/useGlobal";
 import TaskModal from "@/components/ui/modals/TaskModal";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { ITask } from "@/interfaces/task.types";
+import { Status } from "@/validators/taskSchema";
 
 export default function Dashboard() {
   const { state, actions } = useGlobal();
   const {
     deleteTask,
+    updateTask,
+    setDraggedTask,
     setSelectedTask,
     setShowEditTaskModal,
-    setShowCreateTaskModal
+    setShowCreateTaskModal,
   } = actions;
 
   const {
+    draggedTask,
     showCreateTaskModal,
     tasks
   } = state;
@@ -39,6 +43,28 @@ export default function Dashboard() {
     setSelectedTask(task);
     setShowEditTaskModal(true);
     setShowCreateTaskModal(true);
+  };
+
+  const handleDragStart = (e: React.DragEvent, task: ITask) => {
+    setDraggedTask(task);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDrop = (e: React.DragEvent, newStatus: Status) => {
+    e.preventDefault();
+    if (draggedTask && draggedTask.status !== newStatus) {
+      updateTask(draggedTask.id as string, { ...draggedTask, status: newStatus });
+    }
+    setDraggedTask(null);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedTask(null);
   };
 
   useEffect(() => {
@@ -65,7 +91,11 @@ export default function Dashboard() {
             Create task
           </button>
           <div className="row gap-4">
-            <div className="w-[265px] min-h-36 p-4 space-y-4 bg-gray-500 text-white rounded-md shadow-lg">
+            <div
+              className="w-[265px] min-h-36 p-4 space-y-4 bg-gray-500 text-white rounded-md shadow-lg"
+              onDragOver={handleDragOver}
+              onDrop={(e) => handleDrop(e, Status.PENDING)}
+            >
               <h3 className="border-b border-gray-400 pb-2">
                 Pending
               </h3>
@@ -76,8 +106,11 @@ export default function Dashboard() {
                     <div
                       key={task.id}
                       className="col items-center justify-center space-y-4"
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, task)}
+                      onDragEnd={handleDragEnd}
                     >
-                      <div className="col border rounded-md w-full p-2.5 bg-gray-600 space-y-4 min-h-16 break-all overflow-hidden">
+                      <div className="col border rounded-md w-full p-2.5 bg-gray-600 space-y-4 min-h-16 break-all overflow-hidden cursor-move">
                         <div className="flex-between space-x-2 w-full *:cursor-pointer">
                           <span>{task.title}</span>
                           <div className="row">
@@ -115,7 +148,11 @@ export default function Dashboard() {
               )}
             </div>
 
-            <div className="w-[265px] min-h-36 p-4 space-y-4 bg-gray-500 text-white rounded-md shadow-lg">
+            <div
+              className="w-[265px] min-h-36 p-4 space-y-4 bg-gray-500 text-white rounded-md shadow-lg"
+              onDragOver={handleDragOver}
+              onDrop={(e) => handleDrop(e, Status.IN_PROGRESS)}
+            >
               <h3 className="border-b border-gray-400 pb-2">
                 In Progress
               </h3>
@@ -126,8 +163,11 @@ export default function Dashboard() {
                     <div
                       key={task.id}
                       className="col items-center justify-center space-y-4"
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, task)}
+                      onDragEnd={handleDragEnd}
                     >
-                      <div className="col border rounded-md w-full p-2.5 bg-gray-600 space-y-4 min-h-16 break-all overflow-hidden">
+                      <div className="col border rounded-md w-full p-2.5 bg-gray-600 space-y-4 min-h-16 break-all overflow-hidden cursor-move">
                         <div className="flex-between space-x-2 w-full *:cursor-pointer">
                           <span>{task.title}</span>
                           <div className="row">
@@ -165,7 +205,11 @@ export default function Dashboard() {
               )}
             </div>
 
-            <div className="w-[265px] min-h-36 p-4 space-y-4 bg-gray-500 text-white rounded-md shadow-lg">
+            <div
+              className="w-[265px] min-h-36 p-4 space-y-4 bg-gray-500 text-white rounded-md shadow-lg"
+              onDragOver={handleDragOver}
+              onDrop={(e) => handleDrop(e, Status.COMPLETED)}
+            >
               <h3 className="border-b border-gray-400 pb-2">
                 Completed
               </h3>
@@ -176,8 +220,11 @@ export default function Dashboard() {
                     <div
                       key={task.id}
                       className="col items-center justify-center space-y-4"
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, task)}
+                      onDragEnd={handleDragEnd}
                     >
-                      <div className="col border rounded-md w-full p-2.5 bg-gray-600 space-y-4 min-h-16 break-all overflow-hidden">
+                      <div className="col border rounded-md w-full p-2.5 bg-gray-600 space-y-4 min-h-16 break-all overflow-hidden cursor-move">
                         <div className="flex-between space-x-2 w-full *:cursor-pointer">
                           <span>{task.title}</span>
                           <div className="row">
@@ -215,7 +262,11 @@ export default function Dashboard() {
               )}
             </div>
 
-            <div className="w-[265px] min-h-36 p-4 space-y-4 bg-gray-500 text-white rounded-md shadow-lg">
+            <div
+              className="w-[265px] min-h-36 p-4 space-y-4 bg-gray-500 text-white rounded-md shadow-lg"
+              onDragOver={handleDragOver}
+              onDrop={(e) => handleDrop(e, Status.CANCELED)}
+            >
               <h3 className="border-b border-gray-400 pb-2">
                 Canceled
               </h3>
@@ -226,8 +277,11 @@ export default function Dashboard() {
                     <div
                       key={task.id}
                       className="col items-center justify-center space-y-4"
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, task)}
+                      onDragEnd={handleDragEnd}
                     >
-                      <div className="col border rounded-md w-full p-2.5 bg-gray-600 space-y-4 min-h-16 break-all overflow-hidden">
+                      <div className="col border rounded-md w-full p-2.5 bg-gray-600 space-y-4 min-h-16 break-all overflow-hidden cursor-move">
                         <div className="flex-between space-x-2 w-full *:cursor-pointer">
                           <span>{task.title}</span>
                           <div className="row">
