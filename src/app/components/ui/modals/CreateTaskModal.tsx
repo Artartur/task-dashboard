@@ -10,6 +10,10 @@ type CreateTaskFormData = z.infer<typeof createTaskSchema>;
 
 export default function CreateTaskModal() {
   const { actions } = useGlobal();
+  const {
+    createTask,
+    setShowCreateTaskModal
+  } = actions;
 
   const {
     register,
@@ -24,10 +28,10 @@ export default function CreateTaskModal() {
   const onSubmit = async (data: CreateTaskFormData) => {
     try {
       data.createdBy = new Date();
-      actions.createTask(data);
+      createTask(data);
       reset();
     } catch (error) {
-      console.error('Error creating task:', error);
+      alert(`Error creating task: ${error}`);
     }
   };
 
@@ -41,7 +45,7 @@ export default function CreateTaskModal() {
           <button
             type="button"
             className="text-gray-400 hover:text-gray-600 transition-colors"
-            onClick={() => actions.setShowCreateTaskModal(false)}
+            onClick={() => setShowCreateTaskModal(false)}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M18 6L6 18M6 6l12 12" />
@@ -97,7 +101,6 @@ export default function CreateTaskModal() {
               className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.priority ? 'border-red-500' : 'border-gray-300'
                 }`}
             >
-              <option value="">Select priority</option>
               <option value={Priority.LOW}>Low</option>
               <option value={Priority.MEDIUM}>Medium</option>
               <option value={Priority.HIGH}>High</option>
@@ -117,7 +120,6 @@ export default function CreateTaskModal() {
               className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.status ? 'border-red-500' : 'border-gray-300'
                 }`}
             >
-              <option value="">Select status</option>
               <option value={Status.PENDING}>Pending</option>
               <option value={Status.IN_PROGRESS}>In Progress</option>
               <option value={Status.CANCELED}>Canceled</option>
