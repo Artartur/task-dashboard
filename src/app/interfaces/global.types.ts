@@ -7,6 +7,7 @@ export interface IGlobal {
 
 export interface IGlobalActions {
   createTask: (task: ITask) => void;
+  deleteTask: (taskId: string) => void;
   editTask: (taskId: string, updatedTask: ITask) => void;
   setSelectedTask: (task: ITask | null) => void;
   setShowCreateTaskModal: (showCreateTaskModal: boolean) => void;
@@ -22,6 +23,7 @@ export interface IGlobalState {
 
 export type IGlobalReducerActions =
   | { type: 'CREATE_TASK'; payload: ITask }
+  | { type: 'DELETE_TASK'; payload: string }
   | { type: 'EDIT_TASK'; payload: { taskId: string; updatedTask: ITask } }
   | { type: 'SET_SELECTED_TASK'; payload: ITask | null }
   | { type: 'SET_SHOW_CREATE_TASK_MODAL'; payload: boolean }

@@ -13,6 +13,12 @@ export function GlobalReducer(state: IGlobalState, action: IGlobalReducerActions
         showCreateTaskModal: false
       };
 
+    case 'DELETE_TASK':
+      return {
+        ...state,
+        tasks: state.tasks.filter(task => task.id !== action.payload)
+      };
+
     case 'EDIT_TASK':
       return {
         ...state,
