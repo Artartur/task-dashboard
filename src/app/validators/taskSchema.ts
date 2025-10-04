@@ -13,10 +13,17 @@ export enum Status {
   CANCELED = 'CANCELED'
 }
 
-export const createTaskSchema = z.object({
-  createdBy: z.date().optional(),
-  description: z.string().min(1, 'Description is required'),
+export const taskSchema = z.object({
+  createdBy: z
+    .date()
+    .optional(),
+  description: z
+    .string()
+    .min(1, 'Description is required.'),
   priority: z.enum(Priority),
   status: z.enum(Status),
-  title: z.string().min(1, 'Title is required'),
+  title: z
+    .string()
+    .min(1, 'Title is required')
+    .max(30, "Title can't be longer than 30 characters."),
 })

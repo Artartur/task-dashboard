@@ -1,4 +1,4 @@
-import { Priority, Status } from "@/validators/createTaskSchema";
+import { Priority, Status } from "@/validators/taskSchema";
 
 export interface ITask {
   createdBy?: Date;
