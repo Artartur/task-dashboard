@@ -1,7 +1,7 @@
 'use client';
 import { createContext, ReactNode, useReducer } from "react";
 
-import { createTask, setShowCreateTaskModal } from "../actions/GlobalActions";
+import { createTask, editTask, setSelectedTask, setShowCreateTaskModal, setShowEditTaskModal } from "../actions/GlobalActions";
 import { globalInitialValues } from "../defaultValues/globalInitialValues";
 import { GlobalReducer } from "../reducers/GlobalReducer";
 
@@ -14,8 +14,20 @@ export function GlobalProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(GlobalReducer, globalInitialValues);
 
   const actions: IGlobalActions = {
-    createTask: (task: ITask) => dispatch(createTask(task)),
-    setShowCreateTaskModal: (showCreateTaskModal: boolean) => dispatch(setShowCreateTaskModal(showCreateTaskModal))
+    createTask: (task: ITask) =>
+      dispatch(createTask(task)),
+
+    editTask: (taskId: string, updatedTask: ITask) =>
+      dispatch(editTask(taskId, updatedTask)),
+
+    setSelectedTask: (task: ITask | null) =>
+      dispatch(setSelectedTask(task)),
+
+    setShowCreateTaskModal: (showCreateTaskModal: boolean) =>
+      dispatch(setShowCreateTaskModal(showCreateTaskModal)),
+
+    setShowEditTaskModal: (showEditTaskModal: boolean) =>
+      dispatch(setShowEditTaskModal(showEditTaskModal)),
   }
 
   return (

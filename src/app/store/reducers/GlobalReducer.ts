@@ -3,13 +3,37 @@ import { IGlobalReducerActions, IGlobalState } from "@/interfaces/global.types";
 export function GlobalReducer(state: IGlobalState, action: IGlobalReducerActions) {
   switch (action.type) {
     case 'CREATE_TASK':
+      const newTask = {
+        ...action.payload,
+        id: crypto.randomUUID()
+      };
       return {
         ...state,
-        tasks: [...state.tasks, action.payload],
+        tasks: [...state.tasks, newTask],
         showCreateTaskModal: false
       };
+
+    case 'EDIT_TASK':
+      return {
+        ...state,
+        tasks: state.tasks.map(task =>
+          task.id === action.payload.taskId
+            ? { ...action.payload.updatedTask, id: task.id }
+            : task
+        ),
+        showEditTaskModal: false,
+        selectedTask: null
+      };
+
+    case 'SET_SELECTED_TASK':
+      return { ...state, selectedTask: action.payload };
+
     case 'SET_SHOW_CREATE_TASK_MODAL':
       return { ...state, showCreateTaskModal: action.payload };
+
+    case 'SET_SHOW_EDIT_TASK_MODAL':
+      return { ...state, showEditTaskModal: action.payload };
+
     default:
       return state;
   }

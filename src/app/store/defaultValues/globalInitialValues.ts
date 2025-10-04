@@ -1,6 +1,6 @@
 import { IGlobalState } from "@/interfaces/global.types"
 import { ITask } from "@/interfaces/task.types"
-import { Priority, Status } from "@/validators/createTaskSchema"
+import { Priority, Status } from "@/validators/taskSchema"
 
 export const taskInitialValues: ITask = {
   description: '',
@@ -10,6 +10,8 @@ export const taskInitialValues: ITask = {
 }
 
 export const globalInitialValues: IGlobalState = {
+  selectedTask: null,
   showCreateTaskModal: false,
-  tasks: []
+  showEditTaskModal: false,
+  tasks: [],
 }
