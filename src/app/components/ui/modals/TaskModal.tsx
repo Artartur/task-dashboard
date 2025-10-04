@@ -1,51 +1,91 @@
+'use client';
+
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useGlobal } from '@/hooks/useGlobal';
 import { taskInitialValues } from '@/store/defaultValues/globalInitialValues';
-import { createTaskSchema, Priority, Status } from '@/validators/createTaskSchema';
+import { taskSchema, Priority, Status } from '@/validators/taskSchema';
 
-type CreateTaskFormData = z.infer<typeof createTaskSchema>;
+type TaskFormData = z.infer<typeof taskSchema>;
 
-export default function CreateTaskModal() {
-  const { actions } = useGlobal();
+export default function TaskModal() {
+  const { state, actions } = useGlobal();
   const {
     createTask,
+    editTask,
+    setSelectedTask,
+    setShowEditTaskModal,
     setShowCreateTaskModal
   } = actions;
 
+  const {
+    selectedTask,
+    showEditTaskModal,
+  } = state;
+
+  const isEditMode = selectedTask && showEditTaskModal;
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     reset
-  } = useForm<CreateTaskFormData>({
-    resolver: zodResolver(createTaskSchema),
+  } = useForm<TaskFormData>({
+    resolver: zodResolver(taskSchema),
     defaultValues: taskInitialValues,
   });
 
-  const onSubmit = async (data: CreateTaskFormData) => {
+  const handleClose = () => {
+    setShowCreateTaskModal(false);
+    setShowEditTaskModal(false);
+    setSelectedTask(null);
+    reset(taskInitialValues);
+  };
+
+  const onSubmit = async (data: TaskFormData) => {
     try {
-      data.createdBy = new Date();
-      createTask(data);
-      reset();
+      if (isEditMode) {
+        if (!selectedTask.id) return;
+        editTask(selectedTask.id, data);
+      } else {
+        data.createdBy = new Date();
+        createTask(data);
+      }
+      handleClose();
     } catch (error) {
-      alert(`Error creating task: ${error}`);
+      alert(`Error ${isEditMode ? 'editing' : 'creating'} task: ${error}`);
     }
   };
+
+  useEffect(() => {
+    if (isEditMode) {
+      reset({
+        description: selectedTask.description,
+        title: selectedTask.title,
+        priority: selectedTask.priority,
+        status: selectedTask.status
+      });
+    } else {
+      reset(taskInitialValues);
+    }
+  }, [isEditMode, selectedTask, reset]);
 
   return (
     <div className="absolute flex items-center justify-center h-screen w-screen px-4 bg-black/50 top-0">
       <div className="col items-center pt-2 pb-4 px-6 min-h-96 space-y-4 w-full max-w-md bg-white rounded-md">
         <div className="row items-center justify-between mb-6 w-full">
           <h3 className="text-xl font-semibold text-gray-900">
-            Create Task
+            {isEditMode ? 'Edit Task' : 'Create Task'}
           </h3>
           <button
             type="button"
             className="text-gray-400 hover:text-gray-600 transition-colors"
-            onClick={() => setShowCreateTaskModal(false)}
+            onClick={() => {
+              setShowCreateTaskModal(false);
+              setShowEditTaskModal(false);
+            }}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M18 6L6 18M6 6l12 12" />
@@ -135,7 +175,10 @@ export default function CreateTaskModal() {
             disabled={isSubmitting}
             className="w-full px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isSubmitting ? 'Creating...' : 'Create Task'}
+            {isSubmitting
+              ? (isEditMode ? 'Saving...' : 'Creating...')
+              : (isEditMode ? 'Save Changes' : 'Create Task')
+            }
           </button>
         </form>
       </div>
