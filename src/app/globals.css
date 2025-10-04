@@ -2,7 +2,7 @@
 
 @layer base {
     body {
-        @apply flex items-center justify-center w-screen h-dvh bg-indigo-400 md:h-screen;
+        @apply flex items-center justify-center w-screen h-dvh bg-gray-700 md:h-screen;
     }
 
     h1 {
