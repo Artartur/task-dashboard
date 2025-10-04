@@ -14,6 +14,9 @@ export enum Status {
 }
 
 export const taskSchema = z.object({
+  completedBy: z
+    .date()
+    .optional(),
   createdBy: z
     .date()
     .optional(),
@@ -26,4 +29,7 @@ export const taskSchema = z.object({
     .string()
     .min(1, 'Title is required')
     .max(30, "Title can't be longer than 30 characters."),
+  updatedBy: z
+    .date()
+    .optional()
 })

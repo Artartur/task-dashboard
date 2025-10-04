@@ -48,6 +48,7 @@ export default function TaskModal() {
     try {
       if (isEditMode) {
         if (!selectedTask.id) return;
+        data.updatedBy = new Date();
         editTask(selectedTask.id, data);
       } else {
         data.createdBy = new Date();
