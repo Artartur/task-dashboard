@@ -9,9 +9,11 @@ import {
   createTask,
   deleteTask,
   editTask,
+  setDraggedTask,
   setSelectedTask,
   setShowCreateTaskModal,
-  setShowEditTaskModal
+  setShowEditTaskModal,
+  updateTask
 } from "../actions/GlobalActions";
 import { globalInitialValues } from "../defaultValues/globalInitialValues";
 import { GlobalReducer } from "../reducers/GlobalReducer";
@@ -33,6 +35,12 @@ export function GlobalProvider({ children }: { children: ReactNode }) {
 
     editTask: (taskId: string, updatedTask: ITask) =>
       dispatch(editTask(taskId, updatedTask)),
+
+    updateTask: (taskId: string, updatedTask: Partial<ITask>) =>
+      dispatch(updateTask(taskId, updatedTask)),
+
+    setDraggedTask: (task: ITask | null) =>
+      dispatch(setDraggedTask(task)),
 
     setSelectedTask: (task: ITask | null) =>
       dispatch(setSelectedTask(task)),

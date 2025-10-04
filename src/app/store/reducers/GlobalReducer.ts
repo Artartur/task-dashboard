@@ -31,6 +31,19 @@ export function GlobalReducer(state: IGlobalState, action: IGlobalReducerActions
         selectedTask: null
       };
 
+    case 'UPDATE_TASK':
+      return {
+        ...state,
+        tasks: state.tasks.map(task =>
+          task.id === action.payload.taskId
+            ? { ...task, ...action.payload.updatedTask }
+            : task
+        )
+      };
+
+    case 'SET_DRAGGED_TASK':
+      return { ...state, draggedTask: action.payload };
+
     case 'SET_SELECTED_TASK':
       return { ...state, selectedTask: action.payload };
 
