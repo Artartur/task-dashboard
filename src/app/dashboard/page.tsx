@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useGlobal } from "@/hooks/useGlobal";
 
 import TaskModal from "@/components/ui/modals/TaskModal";
@@ -14,12 +14,14 @@ export default function Dashboard() {
     deleteTask,
     updateTask,
     setDraggedTask,
+    setDragOverColumn,
     setSelectedTask,
     setShowEditTaskModal,
     setShowCreateTaskModal,
   } = actions;
 
   const {
+    dragOverColumn,
     draggedTask,
     showCreateTaskModal,
     tasks
@@ -50,9 +52,14 @@ export default function Dashboard() {
     e.dataTransfer.effectAllowed = 'move';
   };
 
-  const handleDragOver = (e: React.DragEvent) => {
+  const handleDragOver = (e: React.DragEvent, columnStatus: Status) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
+    setDragOverColumn(columnStatus);
+  };
+
+  const handleDragLeave = () => {
+    setDragOverColumn(null);
   };
 
   const handleDrop = (e: React.DragEvent, newStatus: Status) => {
@@ -61,10 +68,12 @@ export default function Dashboard() {
       updateTask(draggedTask.id as string, { ...draggedTask, status: newStatus });
     }
     setDraggedTask(null);
+    setDragOverColumn(null);
   };
 
   const handleDragEnd = () => {
     setDraggedTask(null);
+    setDragOverColumn(null);
   };
 
   useEffect(() => {
@@ -92,8 +101,14 @@ export default function Dashboard() {
           </button>
           <div className="row gap-4">
             <div
-              className="w-[265px] min-h-36 p-4 space-y-4 bg-gray-500 text-white rounded-md shadow-lg"
-              onDragOver={handleDragOver}
+              className={`w-[265px] min-h-36 p-4 space-y-4 text-white rounded-md shadow-lg transition-colors duration-200
+                ${dragOverColumn === 'PENDING'
+                  ? 'bg-yellow-500'
+                  : 'bg-gray-500'
+                }`
+              }
+              onDragOver={(e) => handleDragOver(e, Status.PENDING)}
+              onDragLeave={handleDragLeave}
               onDrop={(e) => handleDrop(e, Status.PENDING)}
             >
               <h3 className="border-b border-gray-400 pb-2">
@@ -149,8 +164,14 @@ export default function Dashboard() {
             </div>
 
             <div
-              className="w-[265px] min-h-36 p-4 space-y-4 bg-gray-500 text-white rounded-md shadow-lg"
-              onDragOver={handleDragOver}
+              className={`w-[265px] min-h-36 p-4 space-y-4 text-white rounded-md shadow-lg transition-colors duration-200
+                ${dragOverColumn === 'IN_PROGRESS'
+                  ? 'bg-blue-500'
+                  : 'bg-gray-500'
+                }`
+              }
+              onDragOver={(e) => handleDragOver(e, Status.IN_PROGRESS)}
+              onDragLeave={handleDragLeave}
               onDrop={(e) => handleDrop(e, Status.IN_PROGRESS)}
             >
               <h3 className="border-b border-gray-400 pb-2">
@@ -206,8 +227,14 @@ export default function Dashboard() {
             </div>
 
             <div
-              className="w-[265px] min-h-36 p-4 space-y-4 bg-gray-500 text-white rounded-md shadow-lg"
-              onDragOver={handleDragOver}
+              className={`w-[265px] min-h-36 p-4 space-y-4 text-white rounded-md shadow-lg transition-colors duration-200
+                ${dragOverColumn === 'COMPLETED'
+                  ? 'bg-green-500'
+                  : 'bg-gray-500'
+                }`
+              }
+              onDragOver={(e) => handleDragOver(e, Status.COMPLETED)}
+              onDragLeave={handleDragLeave}
               onDrop={(e) => handleDrop(e, Status.COMPLETED)}
             >
               <h3 className="border-b border-gray-400 pb-2">
@@ -263,8 +290,14 @@ export default function Dashboard() {
             </div>
 
             <div
-              className="w-[265px] min-h-36 p-4 space-y-4 bg-gray-500 text-white rounded-md shadow-lg"
-              onDragOver={handleDragOver}
+              className={`w-[265px] min-h-36 p-4 space-y-4 text-white rounded-md shadow-lg transition-colors duration-200
+                ${dragOverColumn === 'CANCELED'
+                  ? 'bg-red-500'
+                  : 'bg-gray-500'
+                }`
+              }
+              onDragOver={(e) => handleDragOver(e, Status.CANCELED)}
+              onDragLeave={handleDragLeave}
               onDrop={(e) => handleDrop(e, Status.CANCELED)}
             >
               <h3 className="border-b border-gray-400 pb-2">
