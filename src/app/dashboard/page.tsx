@@ -8,11 +8,16 @@ import CreateTaskModal from "@/components/ui/modals/CreateTaskModal";
 
 export default function Dashboard() {
   const { state, actions } = useGlobal();
+  const {
+    showCreateTaskModal,
+    tasks
+  } = state;
+
   const isClient = typeof window !== 'undefined';
 
   useEffect(() => {
     if (isClient) {
-      document.body.style.overflow = state.showCreateTaskModal ? 'hidden' : 'unset';
+      document.body.style.overflow = showCreateTaskModal ? 'hidden' : 'unset';
     }
 
     return () => {
@@ -20,7 +25,7 @@ export default function Dashboard() {
         document.body.style.overflow = 'unset';
       }
     };
-  }, [state.showCreateTaskModal]);
+  }, [showCreateTaskModal]);
 
   return (
     <ProtectedRoute>
@@ -33,9 +38,9 @@ export default function Dashboard() {
           Create task
         </button>
         <div className="row space-x-4 *:bg-gray-500">
-          {state.tasks.length > 0 && (
+          {tasks.length > 0 && (
             <div className="w-[265px] min-h-36 p-4 space-y-4 text-white rounded-md shadow-lg">
-              {state.tasks.map((task) => (
+              {tasks.map((task) => (
                 <div
                   key={task.title}
                   className="col items-center justify-center"
@@ -75,7 +80,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {state.showCreateTaskModal && (
+      {showCreateTaskModal && (
         <CreateTaskModal />
       )}
     </ProtectedRoute>

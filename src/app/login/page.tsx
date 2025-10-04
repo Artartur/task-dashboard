@@ -11,6 +11,8 @@ import { loginInitialValues } from "@/store/defaultValues/authInitialValues";
 
 export default function Login() {
   const { state, actions } = useAuth();
+  const { isAuthenticated } = state;
+
   const router = useRouter();
   const [loginError, setLoginError] = useState<string>('');
 
@@ -38,8 +40,8 @@ export default function Login() {
   }
 
   useEffect(() => {
-    if (state.isAuthenticated) return router.push('/dashboard');
-  }, [state.isAuthenticated, router]);
+    if (isAuthenticated) return router.push('/dashboard');
+  }, [isAuthenticated, router]);
 
   return (
     <div className="flex-center p-4 w-full">

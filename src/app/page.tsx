@@ -8,17 +8,22 @@ import Loading from "./components/Loading";
 
 export default function Home() {
   const { state } = useAuth();
+  const {
+    isAuthenticated,
+    loading
+  } = state;
+
   const router = useRouter();
 
   useEffect(() => {
-    if (!state.loading) {
-      if (state.isAuthenticated) {
+    if (!loading) {
+      if (isAuthenticated) {
         router.push("/dashboard");
       } else {
         router.push("/login");
       }
     }
-  }, [state.isAuthenticated, state.loading, router]);
+  }, [isAuthenticated, loading, router]);
 
   return (
     <Loading />

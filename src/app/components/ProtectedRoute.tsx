@@ -8,15 +8,19 @@ import Loading from "./Loading";
 
 export default function ProtectedRoute({ children }: { children: ReactNode }) {
   const { state } = useAuth();
+  const {
+    isAuthenticated,
+    loading
+  } = state;
   const router = useRouter();
 
   useEffect(() => {
-    if (!state.loading && !state.isAuthenticated) return router.push('/login');
-  }, [state.isAuthenticated, state.loading, router]);
+    if (!loading && !isAuthenticated) return router.push('/login');
+  }, [isAuthenticated, loading, router]);
 
   if (state.loading) return <Loading />;
 
-  if (!state.isAuthenticated) return null;
+  if (!isAuthenticated) return null;
 
   return (
     <div className="w-screen h-screen">
