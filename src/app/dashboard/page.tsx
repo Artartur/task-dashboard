@@ -35,6 +35,13 @@ export default function Dashboard() {
     CANCELED: ''
   });
 
+  const [priorityFilters, setPriorityFilters] = useState({
+    PENDING: '',
+    IN_PROGRESS: '',
+    COMPLETED: '',
+    CANCELED: ''
+  });
+
   const handleCreateTask = () => {
     setSelectedTask(null);
     setShowEditTaskModal(false);
@@ -117,7 +124,7 @@ export default function Dashboard() {
               onDragLeave={handleDragLeave}
               onDrop={(e) => handleDrop(e, Status.PENDING)}
             >
-              <div className="col border-b border-gray-400 pb-2">
+              <div className="col border-b border-gray-400 pb-4">
                 <h3>
                   Pending
                 </h3>
@@ -126,20 +133,41 @@ export default function Dashboard() {
                   <div className="col space-y-1">
                     <input
                       placeholder="Filter by title"
-                      className="border border-gray-400 rounded-sm p-1 w-2/2 outline-0"
+                      className="border border-gray-300 rounded-sm p-1 w-full outline-0 placeholder:text-gray-300"
                       value={filters.PENDING}
                       onChange={(e) => setFilters({ ...filters, PENDING: e.target.value })}
                     />
+                    <div className="col space-y-1">
+                      <label
+                        className="text-sm text-gray-200"
+                        htmlFor="priorities"
+                      >
+                        Priorities:
+                      </label>
+                      <select
+                        className="border border-gray-300 rounded-sm p-1 outline-0 text-gray-300 *:text-black"
+                        name="priorities"
+                        value={priorityFilters.PENDING}
+                        onChange={(e) => setPriorityFilters({ ...priorityFilters, PENDING: e.target.value })}
+                      >
+                        <option value="">All priorities</option>
+                        <option value="LOW">Low</option>
+                        <option value="MEDIUM">Medium</option>
+                        <option value="HIGH">High</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>
               {tasks
                 .filter((task) => task.status === 'PENDING')
                 .filter((task) => task.title.toLowerCase().includes(filters.PENDING.toLowerCase()))
+                .filter((task) => priorityFilters.PENDING === '' || task.priority === priorityFilters.PENDING)
                 .length > 0 ? (
                 tasks
                   .filter((task) => task.status === 'PENDING')
                   .filter((task) => task.title.toLowerCase().includes(filters.PENDING.toLowerCase()))
+                  .filter((task) => priorityFilters.PENDING === '' || task.priority === priorityFilters.PENDING)
                   .map((task) => (
                     <div
                       key={task.id}
@@ -213,7 +241,7 @@ export default function Dashboard() {
               onDragLeave={handleDragLeave}
               onDrop={(e) => handleDrop(e, Status.IN_PROGRESS)}
             >
-              <div className="col border-b border-gray-400 pb-2">
+              <div className="col border-b border-gray-400 pb-4">
                 <h3>
                   In Progress
                 </h3>
@@ -222,20 +250,41 @@ export default function Dashboard() {
                   <div className="col space-y-1">
                     <input
                       placeholder="Filter by title"
-                      className="border border-gray-400 rounded-sm p-1 w-2/2 outline-0"
+                      className="border border-gray-300 rounded-sm p-1 w-full outline-0 placeholder:text-gray-300"
                       value={filters.IN_PROGRESS}
                       onChange={(e) => setFilters({ ...filters, IN_PROGRESS: e.target.value })}
                     />
+                    <div className="col space-y-1">
+                      <label
+                        className="text-sm text-gray-200"
+                        htmlFor="priorities"
+                      >
+                        Priorities:
+                      </label>
+                      <select
+                        className="border border-gray-300 rounded-sm p-1 outline-0 text-gray-300 *:text-black"
+                        name="priorities"
+                        value={priorityFilters.IN_PROGRESS}
+                        onChange={(e) => setPriorityFilters({ ...priorityFilters, IN_PROGRESS: e.target.value })}
+                      >
+                        <option value="">All priorities</option>
+                        <option value="LOW">Low</option>
+                        <option value="MEDIUM">Medium</option>
+                        <option value="HIGH">High</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>
               {tasks
                 .filter((task) => task.status === 'IN_PROGRESS')
                 .filter((task) => task.title.toLowerCase().includes(filters.IN_PROGRESS.toLowerCase()))
+                .filter((task) => priorityFilters.IN_PROGRESS === '' || task.priority === priorityFilters.IN_PROGRESS)
                 .length > 0 ? (
                 tasks
                   .filter((task) => task.status === 'IN_PROGRESS')
                   .filter((task) => task.title.toLowerCase().includes(filters.IN_PROGRESS.toLowerCase()))
+                  .filter((task) => priorityFilters.IN_PROGRESS === '' || task.priority === priorityFilters.IN_PROGRESS)
                   .map((task) => (
                     <div
                       key={task.id}
@@ -309,7 +358,7 @@ export default function Dashboard() {
               onDragLeave={handleDragLeave}
               onDrop={(e) => handleDrop(e, Status.COMPLETED)}
             >
-              <div className="col border-b border-gray-400 pb-2">
+              <div className="col border-b border-gray-400 pb-4">
                 <h3>
                   Completed
                 </h3>
@@ -318,20 +367,41 @@ export default function Dashboard() {
                   <div className="col space-y-1">
                     <input
                       placeholder="Filter by title"
-                      className="border border-gray-400 rounded-sm p-1 w-2/2 outline-0"
+                      className="border border-gray-300 rounded-sm p-1 w-full outline-0 placeholder:text-gray-300"
                       value={filters.COMPLETED}
                       onChange={(e) => setFilters({ ...filters, COMPLETED: e.target.value })}
                     />
+                    <div className="col space-y-1">
+                      <label
+                        className="text-sm text-gray-200"
+                        htmlFor="priorities"
+                      >
+                        Priorities:
+                      </label>
+                      <select
+                        className="border border-gray-300 rounded-sm p-1 outline-0 text-gray-300 *:text-black"
+                        name="priorities"
+                        value={priorityFilters.COMPLETED}
+                        onChange={(e) => setPriorityFilters({ ...priorityFilters, COMPLETED: e.target.value })}
+                      >
+                        <option value="">All priorities</option>
+                        <option value="LOW">Low</option>
+                        <option value="MEDIUM">Medium</option>
+                        <option value="HIGH">High</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>
               {tasks
                 .filter((task) => task.status === 'COMPLETED')
                 .filter((task) => task.title.toLowerCase().includes(filters.COMPLETED.toLowerCase()))
+                .filter((task) => priorityFilters.COMPLETED === '' || task.priority === priorityFilters.COMPLETED)
                 .length > 0 ? (
                 tasks
                   .filter((task) => task.status === 'COMPLETED')
                   .filter((task) => task.title.toLowerCase().includes(filters.COMPLETED.toLowerCase()))
+                  .filter((task) => priorityFilters.COMPLETED === '' || task.priority === priorityFilters.COMPLETED)
                   .map((task) => (
                     <div
                       key={task.id}
@@ -398,7 +468,7 @@ export default function Dashboard() {
               onDragLeave={handleDragLeave}
               onDrop={(e) => handleDrop(e, Status.CANCELED)}
             >
-              <div className="col border-b border-gray-400 pb-2">
+              <div className="col border-b border-gray-400 pb-4">
                 <h3>
                   Canceled
                 </h3>
@@ -407,20 +477,41 @@ export default function Dashboard() {
                   <div className="col space-y-1">
                     <input
                       placeholder="Filter by title"
-                      className="border border-gray-400 rounded-sm p-1 w-2/2 outline-0"
+                      className="border border-gray-300 rounded-sm p-1 w-full outline-0 placeholder:text-gray-300"
                       value={filters.CANCELED}
                       onChange={(e) => setFilters({ ...filters, CANCELED: e.target.value })}
                     />
+                    <div className="col space-y-1">
+                      <label
+                        className="text-sm text-gray-200"
+                        htmlFor="priorities"
+                      >
+                        Priorities:
+                      </label>
+                      <select
+                        className="border border-gray-300 rounded-sm p-1 outline-0 text-gray-300 *:text-black"
+                        name="priorities"
+                        value={priorityFilters.CANCELED}
+                        onChange={(e) => setPriorityFilters({ ...priorityFilters, CANCELED: e.target.value })}
+                      >
+                        <option value="">All priorities</option>
+                        <option value="LOW">Low</option>
+                        <option value="MEDIUM">Medium</option>
+                        <option value="HIGH">High</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>
               {tasks
                 .filter((task) => task.status === 'CANCELED')
                 .filter((task) => task.title.toLowerCase().includes(filters.CANCELED.toLowerCase()))
+                .filter((task) => priorityFilters.CANCELED === '' || task.priority === priorityFilters.CANCELED)
                 .length > 0 ? (
                 tasks
                   .filter((task) => task.status === 'CANCELED')
                   .filter((task) => task.title.toLowerCase().includes(filters.CANCELED.toLowerCase()))
+                  .filter((task) => priorityFilters.CANCELED === '' || task.priority === priorityFilters.CANCELED)
                   .map((task) => (
                     <div
                       key={task.id}
