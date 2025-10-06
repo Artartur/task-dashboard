@@ -1,7 +1,9 @@
 'use client';
+
 import {
   createContext,
   ReactNode,
+  useEffect,
   useReducer
 } from "react";
 
@@ -21,11 +23,12 @@ import { GlobalReducer } from "../reducers/GlobalReducer";
 
 import { IGlobal, IGlobalActions } from "@/interfaces/global.types";
 import { ITask } from "@/interfaces/task.types";
+import { getStoredTasks, STORAGE_KEY } from "@/utils/getStoredTasks";
 
 export const GlobalContext = createContext<IGlobal | undefined>(undefined);
 
 export function GlobalProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(GlobalReducer, globalInitialValues);
+  const [state, dispatch] = useReducer(GlobalReducer, globalInitialValues, getStoredTasks);
 
   const actions: IGlobalActions = {
     createTask: (task: ITask) =>
@@ -55,6 +58,16 @@ export function GlobalProvider({ children }: { children: ReactNode }) {
     setShowEditTaskModal: (showEditTaskModal: boolean) =>
       dispatch(setShowEditTaskModal(showEditTaskModal)),
   }
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state.tasks));
+      } catch (error) {
+        alert(`Erro ao salvar tarefas no localStorage: ${error}`)
+      }
+    }
+  }, [state.tasks]);
 
   return (
     <GlobalContext.Provider value={{ state, actions }}>
