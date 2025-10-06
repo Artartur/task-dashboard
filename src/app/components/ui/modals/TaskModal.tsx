@@ -64,28 +64,25 @@ export default function TaskModal() {
   };
 
   useEffect(() => {
-    if (isEditMode) {
-      reset({
-        createdBy: selectedTask.createdBy,
-        description: selectedTask.description,
-        title: selectedTask.title,
-        priority: selectedTask.priority,
-        status: selectedTask.status
-      });
-    } else {
-      reset(taskInitialValues);
-    }
-  }, [isEditMode, selectedTask, reset]);
-
-  useEffect(() => {
     if (isClient) {
-      const shouldBlockScroll = showCreateTaskModal || showEditTaskModal;
-      if (shouldBlockScroll) {
+      if (showCreateTaskModal || showEditTaskModal) {
         document.documentElement.style.overflow = 'hidden';
         document.body.style.overflow = 'hidden';
       } else {
         document.documentElement.style.overflow = 'unset';
         document.body.style.overflow = 'unset';
+      }
+
+      if (isEditMode) {
+        reset({
+          createdBy: selectedTask.createdBy,
+          description: selectedTask.description,
+          title: selectedTask.title,
+          priority: selectedTask.priority,
+          status: selectedTask.status
+        });
+      } else {
+        reset(taskInitialValues);
       }
     }
 
@@ -95,7 +92,7 @@ export default function TaskModal() {
         document.body.style.overflow = 'unset';
       }
     };
-  }, [showCreateTaskModal, showEditTaskModal, isClient]);
+  }, [isClient, isEditMode, selectedTask, showCreateTaskModal, showEditTaskModal, reset]);
 
   return (
     <div className="absolute flex items-center justify-center h-screen w-screen px-4 bg-black/50 top-0 left-0 z-10">
