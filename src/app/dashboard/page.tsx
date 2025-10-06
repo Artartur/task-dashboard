@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useGlobal } from "@/hooks/useGlobal";
 
 import TaskModal from "@/components/ui/modals/TaskModal";
@@ -27,7 +27,6 @@ export default function Dashboard() {
     tasks
   } = state;
 
-  const isClient = typeof window !== 'undefined';
   const [filters, setFilters] = useState({
     PENDING: '',
     IN_PROGRESS: '',
@@ -112,21 +111,9 @@ export default function Dashboard() {
     });
   };
 
-  useEffect(() => {
-    if (isClient) {
-      document.body.style.overflow = showCreateTaskModal ? 'hidden' : 'unset';
-    }
-
-    return () => {
-      if (isClient) {
-        document.body.style.overflow = 'unset';
-      }
-    };
-  }, [showCreateTaskModal, isClient]);
-
   return (
     <ProtectedRoute>
-      <div className="col items-start h-screen xl:flex xl:w-screen xl:items-center xl:overflow-x-hidden xl:pb-10">
+      <div className="col items-start h-screen xl:flex xl:w-screen xl:items-center xl:pb-10">
         <div className="col items-start justify-start space-y-4 px-6 first:mt-6">
           <button
             type="button"

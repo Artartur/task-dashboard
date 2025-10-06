@@ -23,10 +23,10 @@ export default function TaskModal() {
 
   const {
     selectedTask,
+    showCreateTaskModal,
     showEditTaskModal,
   } = state;
 
-  const isEditMode = selectedTask && showEditTaskModal;
   const {
     register,
     handleSubmit,
@@ -36,6 +36,9 @@ export default function TaskModal() {
     resolver: zodResolver(taskSchema),
     defaultValues: taskInitialValues,
   });
+
+  const isClient = typeof window !== 'undefined';
+  const isEditMode = selectedTask && showEditTaskModal;
 
   const handleClose = () => {
     setShowCreateTaskModal(false);
@@ -63,6 +66,7 @@ export default function TaskModal() {
   useEffect(() => {
     if (isEditMode) {
       reset({
+        createdBy: selectedTask.createdBy,
         description: selectedTask.description,
         title: selectedTask.title,
         priority: selectedTask.priority,
@@ -73,8 +77,28 @@ export default function TaskModal() {
     }
   }, [isEditMode, selectedTask, reset]);
 
+  useEffect(() => {
+    if (isClient) {
+      const shouldBlockScroll = showCreateTaskModal || showEditTaskModal;
+      if (shouldBlockScroll) {
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.documentElement.style.overflow = 'unset';
+        document.body.style.overflow = 'unset';
+      }
+    }
+
+    return () => {
+      if (isClient) {
+        document.documentElement.style.overflow = 'unset';
+        document.body.style.overflow = 'unset';
+      }
+    };
+  }, [showCreateTaskModal, showEditTaskModal, isClient]);
+
   return (
-    <div className="absolute flex items-center justify-center h-screen w-screen px-4 bg-black/50 top-0">
+    <div className="absolute flex items-center justify-center h-screen w-screen px-4 bg-black/50 top-0 left-0 z-10">
       <div className="col items-center pt-2 pb-4 px-6 min-h-96 space-y-4 w-full max-w-md bg-white rounded-md">
         <div className="row items-center justify-between mb-6 w-full">
           <h3 className="text-xl font-semibold text-gray-900">
